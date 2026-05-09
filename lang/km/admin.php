@@ -88,4 +88,5 @@ return [
     'confirm_delete_text' => 'អ្នកនឹងមិនអាចត្រឡប់មកវិញបានទេ!',
     'yes_delete' => 'បាទ! លុបវា',
     'cancel_action' => 'បោះបង់',
+    'select' => 'ជ្រើស',
 ];

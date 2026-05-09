@@ -88,4 +88,5 @@ return [
     'confirm_delete_text' => "You won't be able to revert this!",
     'yes_delete' => 'Yes, delete it!',
     'cancel_action' => 'Cancel',
+    'select' => 'Select',
 ];
