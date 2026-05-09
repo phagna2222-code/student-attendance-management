@@ -48,6 +48,13 @@
     <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
     <!--End Back To Top Button-->
 
+    {{-- Placeholder containers required by the bundled assets/backend/.../app.js
+         which auto-initialises PerfectScrollbar on these selectors. The SAMS
+         header doesn't render messages/notifications dropdowns, so we keep
+         these as hidden anchors to avoid the "no element is specified" error. --}}
+    <div class="header-message-list d-none" aria-hidden="true"></div>
+    <div class="header-notifications-list d-none" aria-hidden="true"></div>
+
     <!--start switcher-->
     <div class="switcher-body">
       <button class="btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas"

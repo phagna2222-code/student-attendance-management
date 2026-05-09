@@ -37,6 +37,7 @@
   <link href="{{ asset('assets/backend') }}/assets/css/header-colors.css" rel="stylesheet" />
 
   {{-- Vite-bundled SCSS / JS for the SAMS layer (Bootstrap 5, jQuery, DataTables, SweetAlert2, Flatpickr, Tom Select, React, language switcher) --}}
+  @viteReactRefresh
   @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
   <title>@yield('pageTitle', config('app.name', 'SAMS'))</title>

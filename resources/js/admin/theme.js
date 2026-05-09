@@ -20,6 +20,7 @@ function applyMode(mode) {
 
 function applyColor(color) {
     COLOR_CLASSES.forEach(cls => HTML.classList.remove(cls));
+    HTML.classList.toggle('color-header', !!color);
     if (color) HTML.classList.add(color);
 }
 

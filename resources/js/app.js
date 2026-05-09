@@ -3,11 +3,19 @@ import './bootstrap';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
+// The bundled admin theme (public/assets/backend/...) ships its own jQuery 3
+// and a chain of plugins (metismenu, simplebar, perfect-scrollbar) that attach
+// to it. To keep those plugins working we DO NOT overwrite window.$ when the
+// theme has already loaded its jQuery; we just register DataTables on whichever
+// jQuery is currently exposed.
 import jQuery from 'jquery';
-window.$ = window.jQuery = jQuery;
+const $jq = window.jQuery && window.jQuery.fn ? window.jQuery : jQuery;
+if (!window.jQuery) {
+    window.$ = window.jQuery = jQuery;
+}
 
-import 'datatables.net-bs5';
-import 'datatables.net-buttons-bs5';
+import('datatables.net-bs5').then(({ default: dtFactory }) => dtFactory && dtFactory(window, $jq));
+import('datatables.net-buttons-bs5').then(({ default: btnFactory }) => btnFactory && btnFactory(window, $jq));
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;
