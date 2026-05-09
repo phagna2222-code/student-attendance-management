@@ -1,59 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Student Attendance Management System (SAMS)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Multi-branch Laravel 12 + React + Bootstrap 5 admin panel for school student
+attendance.
 
-## About Laravel
+## Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Backend**: Laravel 12 (PHP 8.3), SQLite (default), MySQL/PostgreSQL ready
+- **Frontend**: React 19, Bootstrap 5, jQuery 3.7, DataTables 2 (Bootstrap 5
+  fixed pagination, server-side via [Yajra Laravel DataTables](https://yajrabox.com/docs/laravel-datatables))
+- **UX**: SweetAlert2 (confirm delete), [PHPFlasher](https://php-flasher.io/)
+  SweetAlert toasts (success), Flatpickr (date/time pickers), Tom Select (select
+  fields)
+- **i18n**: Khmer / English with **no-refresh** switcher (DOM updates +
+  DataTables redraw + cookie/session persist)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Module map
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+28 separate CRUD modules following the standard pattern: `index.blade.php`,
+`create.blade.php`, `edit.blade.php`, `_form.blade.php`.
 
-## Learning Laravel
+| Group | Modules |
+|---|---|
+| School setup | Branches, School Profiles, Academic Years, Terms, Shifts, Rooms, Grade Levels, Subjects, Attendance Statuses |
+| People | Users, Teachers, Parents, Students |
+| Classes | Classes, Class Students, Teacher–Subject Assignments, Class Attendance Settings, Timetables |
+| Attendance | Sessions, Records (bulk entry via React), Leave Requests |
+| Communications | Notification Templates, Notifications |
+| Security / Admin | Roles, Permissions, Audit Logs, System Settings |
+| Reports | Reports |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+# 1. Install backend deps
+composer install
 
-## Laravel Sponsors
+# 2. Install frontend deps
+npm install
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 3. Configure .env
+cp .env.example .env
+php artisan key:generate
+# database is SQLite by default (database/database.sqlite)
 
-### Premium Partners
+# 4. Run migrations + seeder
+php artisan migrate:fresh --seed
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 5. Build assets
+npm run build      # production
+# or
+npm run dev        # dev server (Vite hot-reload)
 
-## Contributing
+# 6. Run the app
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Default admin credentials: **admin@example.com / password**
+Demo teacher: **teacher@example.com / password**
 
-## Code of Conduct
+## Architecture notes
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `app/Http/Controllers/Admin/ResourceController.php` — base CRUD class used by
+  most modules. Subclasses define `$modelClass`, `$viewPath`, `$routePrefix` and
+  `validationRules()`; override hooks `dataTableQuery()`, `buildDataTable()`,
+  `extraData()`, `mapInput()` for module-specific behaviour.
+- `app/Services/BranchContext.php` — session-scoped current branch + helpers to
+  scope queries by `branch_id` and gate which branches a user may switch to.
+- `app/Http/Middleware/SetLocale.php` — applies `app.locale` from session/cookie
+  on every request.
+- `app/Http/Middleware/EnsureAdminAuthenticated.php` — gates `/admin/*` to
+  super_admin/school_admin/teacher/secretary/auditor user types.
+- `app/Http/Controllers/LocaleController.php` — `GET /lang/{locale}` returns the
+  merged JSON for client-side translations; `POST /lang/{locale}/persist`
+  persists the choice.
+- `resources/js/app.js` is the single Vite entry point that wires Bootstrap,
+  DataTables (Bootstrap 5), SweetAlert2, Flatpickr, Tom Select, the i18n
+  switcher, the React mount loop, and the navigation toggle.
+- `resources/js/admin/i18n.js` swaps text in `[data-i18n]`, placeholders in
+  `[data-i18n-placeholder]`, and DataTables strings without reloading.
+- `resources/js/admin/datatable.js` initialises every `table.js-datatable` with
+  AJAX server-side, fixed Bootstrap 5 full-numbers pagination.
+- `resources/js/admin/delete.js` wires SweetAlert2 confirms to
+  `.js-confirm-delete` buttons and submits the parent form on confirm.
+- `resources/js/admin/form.js` auto-initialises Flatpickr (`.flatpickr`,
+  `.flatpickr-datetime`, `.flatpickr-time`) and Tom Select
+  (`select.tom-select`, `select.tom-select-multi`).
+- `resources/js/react/mount.jsx` mounts every `[data-react]` container and
+  passes `data-props` JSON as props.
 
-## Security Vulnerabilities
+## Component patterns
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### List page
 
-## License
+Uses `resources/views/admin/partials/_card_index.blade.php`, e.g.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```blade
+@include('admin.partials._card_index', [
+  'title'        => __('admin.branches'),
+  'createUrl'    => route('admin.branches.create'),
+  'datatableUrl' => route('admin.branches.datatable'),
+  'columns'      => [ /* DataTables column defs */ ],
+])
+```
+
+### Form pages
+
+```blade
+<x-admin.form-card :title="..." :action="route('admin.X.update', $model->id)" method="PUT" :cancel-url="route('admin.X.index')">
+  @include('admin.X._form')
+</x-admin.form-card>
+```
+
+`_form.blade.php` uses the field partials in `resources/views/admin/partials/`:
+`_input`, `_select`, `_textarea`, `_checkbox`. These wire up Flatpickr/Tom
+Select classes and old() values automatically.
+
+### Delete
+
+Buttons inside list rows or forms get class `js-confirm-delete`; the global
+delete handler shows a SweetAlert2 confirmation and then submits the
+surrounding form.
+
+### Flash messages
+
+`flash()->success(...)` from controllers — the @flasher_render directive
+renders the SweetAlert2 toast on the next response.
