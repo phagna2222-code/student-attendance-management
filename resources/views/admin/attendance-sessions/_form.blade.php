@@ -1,0 +1,15 @@
+<div class="row">
+  @include('admin.partials._select', ['name'=>'branch_id','label'=>"Branch",'value'=>$model->branch_id ?? '','options'=>$branches,'labelKey'=>'name_en','col'=>4,'required'=>true])
+  @include('admin.partials._select', ['name'=>'class_id','label'=>"Class",'value'=>$model->class_id ?? '','options'=>$classes,'col'=>4,'required'=>true])
+  @include('admin.partials._select', ['name'=>'subject_id','label'=>"Subject",'value'=>$model->subject_id ?? '','options'=>$subjects,'labelKey'=>'name_en','col'=>4,'required'=>false])
+  @include('admin.partials._select', ['name'=>'teacher_id','label'=>"Teacher",'value'=>$model->teacher_id ?? '','options'=>$teachers,'labelKey'=>'name_en','col'=>4,'required'=>false])
+  @include('admin.partials._select', ['name'=>'academic_year_id','label'=>"Academic Year",'value'=>$model->academic_year_id ?? '','options'=>$academicYears,'col'=>4,'required'=>false])
+  @include('admin.partials._select', ['name'=>'term_id','label'=>"Term",'value'=>$model->term_id ?? '','options'=>$terms,'col'=>4,'required'=>false])
+  @include('admin.partials._input', ['name'=>'attendance_date','label'=>"Date",'value'=>$model->attendance_date ?? '','col'=>4,'required'=>true,'type'=>'date'])
+  @include('admin.partials._select', ['name'=>'session_type','label'=>"Session Type",'value'=>$model->session_type ?? '','options'=>[['id'=>'daily','display'=>'Daily'], ['id'=>'period','display'=>'Period'], ['id'=>'morning','display'=>'Morning'], ['id'=>'afternoon','display'=>'Afternoon'], ['id'=>'evening','display'=>'Evening']],'col'=>4,'required'=>true])
+  @include('admin.partials._input', ['name'=>'period_no','label'=>"Period #",'value'=>$model->period_no ?? '','col'=>4,'required'=>false,'type'=>'number'])
+  @include('admin.partials._input', ['name'=>'start_time','label'=>"Start",'value'=>$model->start_time ?? '','col'=>4,'required'=>false,'type'=>'time'])
+  @include('admin.partials._input', ['name'=>'end_time','label'=>"End",'value'=>$model->end_time ?? '','col'=>4,'required'=>false,'type'=>'time'])
+  @include('admin.partials._select', ['name'=>'submission_status','label'=>"Submission Status",'value'=>$model->submission_status ?? '','options'=>[['id'=>'draft','display'=>'Draft'], ['id'=>'submitted','display'=>'Submitted'], ['id'=>'locked','display'=>'Locked'], ['id'=>'cancelled','display'=>'Cancelled']],'col'=>4,'required'=>true])
+  @include('admin.partials._textarea', ['name'=>'note','label'=>"Note",'value'=>$model->note ?? '','rows'=>3,'required'=>false])
+</div>

@@ -1,0 +1,17 @@
+{
+    "Dashboard": "ផ្ទាំងគ្រប់គ្រង",
+    "Save": "រក្សាទុក",
+    "Cancel": "បោះបង់",
+    "Edit": "កែប្រែ",
+    "Delete": "លុប",
+    "Create": "បង្កើត",
+    "Update": "ធ្វើបច្ចុប្បន្នភាព",
+    "Yes, delete it": "បាទ លុបវា",
+    "Cancelled": "បានបោះបង់",
+    "Are you sure?": "តើអ្នកពិតជាប្រាកដឬ?",
+    "This action cannot be undone.": "សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+    "Saved successfully": "បានរក្សាទុកដោយជោគជ័យ",
+    "Deleted successfully": "បានលុបដោយជោគជ័យ",
+    "Updated successfully": "បានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ",
+    "Operation failed": "ប្រតិបត្តិការបរាជ័យ"
+}

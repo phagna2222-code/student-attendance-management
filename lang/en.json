@@ -1,0 +1,17 @@
+{
+    "Dashboard": "Dashboard",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Create": "Create",
+    "Update": "Update",
+    "Yes, delete it": "Yes, delete it",
+    "Cancelled": "Cancelled",
+    "Are you sure?": "Are you sure?",
+    "This action cannot be undone.": "This action cannot be undone.",
+    "Saved successfully": "Saved successfully",
+    "Deleted successfully": "Deleted successfully",
+    "Updated successfully": "Updated successfully",
+    "Operation failed": "Operation failed"
+}
