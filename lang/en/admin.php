@@ -8,6 +8,7 @@ return [
     'language' => 'Language',
     'branch' => 'Branch',
     'all_branches' => 'All Branches',
+    'active_branch' => 'Active branch',
     'logout' => 'Logout',
     'login' => 'Login',
     'login_to_account' => 'Login to your account',
@@ -19,13 +20,17 @@ return [
     // sections
     'section_school' => 'School',
     'section_people' => 'People',
+    'section_classroom' => 'Classroom',
     'section_attendance' => 'Attendance',
     'section_communication' => 'Communication',
+    'section_reports' => 'Reports & Analytics',
     'section_security' => 'Security',
+    'section_system' => 'System',
     'academic_section' => 'Academic',
 
     // modules
     'branches' => 'Branches',
+    'school_profile' => 'School Profile',
     'academic_years' => 'Academic Years',
     'terms' => 'Terms',
     'shifts' => 'Shifts',
@@ -82,6 +87,15 @@ return [
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
     'no_records' => 'No records found',
+
+    // theme switcher
+    'theme_customizer' => 'Theme Customizer',
+    'theme_variation' => 'Theme Variation',
+    'theme_light' => 'Light',
+    'theme_dark' => 'Dark',
+    'theme_semi_dark' => 'Semi Dark',
+    'theme_minimal' => 'Minimal Theme',
+    'theme_header_colors' => 'Header Colors',
 
     // confirmation
     'confirm_delete_title' => 'Are you sure?',

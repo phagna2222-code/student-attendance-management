@@ -6,19 +6,19 @@
         <div class="top-navbar d-none d-xl-block">
           <ul class="navbar-nav align-items-center">
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.dashboard') }}" data-i18n="nav.dashboard">{{ __('admin.dashboard') }}</a>
+              <a class="nav-link" href="{{ route('admin.dashboard') }}" data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.attendance-records.index') }}" data-i18n="nav.attendance">{{ __('admin.attendance') }}</a>
+              <a class="nav-link" href="{{ route('admin.attendance-records.index') }}" data-i18n="admin.attendance">{{ __('admin.attendance') }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.students.index') }}" data-i18n="nav.students">{{ __('admin.students') }}</a>
+              <a class="nav-link" href="{{ route('admin.students.index') }}" data-i18n="admin.students">{{ __('admin.students') }}</a>
             </li>
             <li class="nav-item d-none d-xxl-block">
-              <a class="nav-link" href="{{ route('admin.classes.index') }}" data-i18n="nav.classes">{{ __('admin.classes') }}</a>
+              <a class="nav-link" href="{{ route('admin.classes.index') }}" data-i18n="admin.classes">{{ __('admin.classes') }}</a>
             </li>
             <li class="nav-item d-none d-xxl-block">
-              <a class="nav-link" href="{{ route('admin.reports.index') }}" data-i18n="nav.reports">{{ __('admin.reports') }}</a>
+              <a class="nav-link" href="{{ route('admin.reports.index') }}" data-i18n="admin.reports">{{ __('admin.reports') }}</a>
             </li>
           </ul>
         </div>
@@ -28,7 +28,7 @@
         </div>
         <form class="searchbar d-none d-xl-flex ms-auto">
           <div class="position-absolute top-50 translate-middle-y search-icon ms-3"><i class="bi bi-search"></i></div>
-          <input class="form-control" type="text" placeholder="{{ __('admin.search_placeholder') }}" data-i18n-placeholder="search.placeholder">
+          <input class="form-control" type="text" placeholder="{{ __('admin.search_placeholder') }}" data-i18n-placeholder="admin.search_placeholder">
           <div class="position-absolute top-50 translate-middle-y d-block d-xl-none search-close-icon"><i class="bi bi-x-lg"></i></div>
         </form>
 
@@ -52,7 +52,7 @@
                     <input type="hidden" name="branch_id" value="">
                     <button type="submit" class="dropdown-item d-flex align-items-center">
                       <i class="bi bi-globe me-2"></i>
-                      <span data-i18n="branch.all">{{ __('admin.all_branches') }}</span>
+                      <span data-i18n="admin.all_branches">{{ __('admin.all_branches') }}</span>
                     </button>
                   </form>
                 </li>
@@ -120,7 +120,7 @@
                   <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
                     <div class="d-flex align-items-center">
                       <div class="setting-icon"><i class="bi bi-speedometer"></i></div>
-                      <div class="setting-text ms-3"><span data-i18n="nav.dashboard">{{ __('admin.dashboard') }}</span></div>
+                      <div class="setting-text ms-3"><span data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</span></div>
                     </div>
                   </a>
                 </li>
@@ -128,7 +128,7 @@
                   <a class="dropdown-item" href="{{ route('admin.system-settings.index') }}">
                     <div class="d-flex align-items-center">
                       <div class="setting-icon"><i class="bi bi-gear-fill"></i></div>
-                      <div class="setting-text ms-3"><span data-i18n="nav.settings">{{ __('admin.settings') }}</span></div>
+                      <div class="setting-text ms-3"><span data-i18n="admin.settings">{{ __('admin.settings') }}</span></div>
                     </div>
                   </a>
                 </li>
@@ -139,7 +139,7 @@
                     <button type="submit" class="dropdown-item">
                       <div class="d-flex align-items-center">
                         <div class="setting-icon"><i class="bi bi-box-arrow-right"></i></div>
-                        <div class="setting-text ms-3"><span data-i18n="auth.logout">{{ __('admin.logout') }}</span></div>
+                        <div class="setting-text ms-3"><span data-i18n="admin.logout">{{ __('admin.logout') }}</span></div>
                       </div>
                     </button>
                   </form>

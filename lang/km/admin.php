@@ -8,6 +8,7 @@ return [
     'language' => 'ភាសា',
     'branch' => 'សាខា',
     'all_branches' => 'គ្រប់សាខា',
+    'active_branch' => 'សាខាសកម្ម',
     'logout' => 'ចេញពីប្រព័ន្ធ',
     'login' => 'ចូលប្រើប្រាស់',
     'login_to_account' => 'ចូលគណនីរបស់អ្នក',
@@ -19,13 +20,17 @@ return [
     // sections
     'section_school' => 'សាលា',
     'section_people' => 'បុគ្គលិក/សិស្ស',
+    'section_classroom' => 'ថ្នាក់រៀន',
     'section_attendance' => 'វត្តមាន',
     'section_communication' => 'ការទំនាក់ទំនង',
+    'section_reports' => 'របាយការណ៍ និងវិភាគ',
     'section_security' => 'សុវត្ថិភាព',
+    'section_system' => 'ប្រព័ន្ធ',
     'academic_section' => 'ផ្នែកអប់រំ',
 
     // modules
     'branches' => 'សាខា',
+    'school_profile' => 'ព័ត៌មានសាលា',
     'academic_years' => 'ឆ្នាំសិក្សា',
     'terms' => 'អំឡុងពេលសិក្សា',
     'shifts' => 'វេន',
@@ -82,6 +87,15 @@ return [
     'created_at' => 'បានបង្កើតនៅ',
     'updated_at' => 'បានធ្វើបច្ចុប្បន្នភាពនៅ',
     'no_records' => 'មិនមានទិន្នន័យទេ',
+
+    // theme switcher
+    'theme_customizer' => 'ប្ដូររូបរាងស្បែក',
+    'theme_variation' => 'ប្រភេទស្បែក',
+    'theme_light' => 'ភ្លឺ',
+    'theme_dark' => 'ងងឹត',
+    'theme_semi_dark' => 'ងងឹតពាក់កណ្ដាល',
+    'theme_minimal' => 'ស្បែកសាមញ្ញ',
+    'theme_header_colors' => 'ពណ៌ផ្ទាំងខាងលើ',
 
     // confirmation
     'confirm_delete_title' => 'តើអ្នកប្រាកដឬ?',
