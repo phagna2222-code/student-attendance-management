@@ -6,19 +6,24 @@
         <div class="top-navbar d-none d-xl-block">
           <ul class="navbar-nav align-items-center">
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.dashboard') }}" data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</a>
+              <a class="nav-link" href="{{ route('admin.dashboard') }}"
+                data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.attendance-records.index') }}" data-i18n="admin.attendance">{{ __('admin.attendance') }}</a>
+              <a class="nav-link" href="{{ route('admin.attendance-records.index') }}"
+                data-i18n="admin.attendance">{{ __('admin.attendance') }}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('admin.students.index') }}" data-i18n="admin.students">{{ __('admin.students') }}</a>
+              <a class="nav-link" href="{{ route('admin.students.index') }}"
+                data-i18n="admin.students">{{ __('admin.students') }}</a>
             </li>
             <li class="nav-item d-none d-xxl-block">
-              <a class="nav-link" href="{{ route('admin.classes.index') }}" data-i18n="admin.classes">{{ __('admin.classes') }}</a>
+              <a class="nav-link" href="{{ route('admin.classes.index') }}"
+                data-i18n="admin.classes">{{ __('admin.classes') }}</a>
             </li>
             <li class="nav-item d-none d-xxl-block">
-              <a class="nav-link" href="{{ route('admin.reports.index') }}" data-i18n="admin.reports">{{ __('admin.reports') }}</a>
+              <a class="nav-link" href="{{ route('admin.reports.index') }}"
+                data-i18n="admin.reports">{{ __('admin.reports') }}</a>
             </li>
           </ul>
         </div>
@@ -28,126 +33,154 @@
         </div>
         <form class="searchbar d-none d-xl-flex ms-auto">
           <div class="position-absolute top-50 translate-middle-y search-icon ms-3"><i class="bi bi-search"></i></div>
-          <input class="form-control" type="text" placeholder="{{ __('admin.search_placeholder') }}" data-i18n-placeholder="admin.search_placeholder">
-          <div class="position-absolute top-50 translate-middle-y d-block d-xl-none search-close-icon"><i class="bi bi-x-lg"></i></div>
+          <input class="form-control" type="text" placeholder="{{ __('admin.search_placeholder') }}"
+            data-i18n-placeholder="admin.search_placeholder">
+          <div class="position-absolute top-50 translate-middle-y d-block d-xl-none search-close-icon"><i
+              class="bi bi-x-lg"></i></div>
         </form>
 
         <div class="top-navbar-right ms-3">
-          <ul class="navbar-nav align-items-center">
+          <div class="header-actions-shell">
+            <ul class="navbar-nav align-items-center header-actions-list">
 
-            {{-- Branch selector --}}
-            @auth
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown" title="{{ __('admin.branch') }}">
-                <i class="bi bi-building"></i>
-                <span class="d-none d-md-inline ms-1">
-                  @php $current = app(\App\Services\BranchContext::class)->current(); @endphp
-                  {{ $current ? $current->localizedName() : __('admin.all_branches') }}
-                </span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" style="min-width: 240px;">
-                <li>
-                  <form method="POST" action="{{ route('admin.branch.set') }}">
-                    @csrf
-                    <input type="hidden" name="branch_id" value="">
-                    <button type="submit" class="dropdown-item d-flex align-items-center">
-                      <i class="bi bi-globe me-2"></i>
-                      <span data-i18n="admin.all_branches">{{ __('admin.all_branches') }}</span>
-                    </button>
-                  </form>
+              {{-- Branch selector --}}
+              @auth
+                <li class="nav-item dropdown header-action-item">
+                  <button
+                    class="nav-link dropdown-toggle dropdown-toggle-nocaret header-action-trigger js-header-dropdown"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('admin.branch') }}">
+                    <i class="bi bi-building"></i>
+                    <span class="d-none d-md-inline header-action-label">
+                      @php $current = app(\App\Services\BranchContext::class)->current(); @endphp
+                      {{ $current ? $current->localizedName() : __('admin.all_branches') }}
+                    </span>
+                    <i class="bi bi-chevron-down header-action-caret"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" style="min-width: 240px;">
+                    <li>
+                      <form method="POST" action="{{ route('admin.branch.set') }}">
+                        @csrf
+                        <input type="hidden" name="branch_id" value="">
+                        <button type="submit" class="dropdown-item d-flex align-items-center">
+                          <i class="bi bi-globe me-2"></i>
+                          <span data-i18n="admin.all_branches">{{ __('admin.all_branches') }}</span>
+                        </button>
+                      </form>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    @foreach (\App\Models\Branch::orderBy('name_en')->get() as $branch)
+                      <li>
+                        <form method="POST" action="{{ route('admin.branch.set') }}">
+                          @csrf
+                          <input type="hidden" name="branch_id" value="{{ $branch->id }}">
+                          <button type="submit" class="dropdown-item d-flex align-items-center">
+                            <i class="bi bi-{{ $branch->is_main ? 'star-fill text-warning' : 'building' }} me-2"></i>
+                            {{ $branch->localizedName() }}
+                            <small class="text-muted ms-auto">{{ $branch->code }}</small>
+                          </button>
+                        </form>
+                      </li>
+                    @endforeach
+                  </ul>
                 </li>
-                <li><hr class="dropdown-divider"></li>
-                @foreach(\App\Models\Branch::orderBy('name_en')->get() as $branch)
+              @endauth
+
+              {{-- Language switcher (no refresh) --}}
+              <li class="nav-item dropdown header-action-item">
+                <button
+                  class="nav-link dropdown-toggle dropdown-toggle-nocaret header-action-trigger js-header-dropdown"
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ __('admin.language') }}">
+                  <i class="bi bi-translate"></i>
+                  <span class="d-none d-md-inline header-action-label"
+                    id="current-locale-label">{{ strtoupper(app()->getLocale()) }}</span>
+                  <i class="bi bi-chevron-down header-action-caret"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
                   <li>
-                    <form method="POST" action="{{ route('admin.branch.set') }}">
-                      @csrf
-                      <input type="hidden" name="branch_id" value="{{ $branch->id }}">
-                      <button type="submit" class="dropdown-item d-flex align-items-center">
-                        <i class="bi bi-{{ $branch->is_main ? 'star-fill text-warning' : 'building' }} me-2"></i>
-                        {{ $branch->localizedName() }}
-                        <small class="text-muted ms-auto">{{ $branch->code }}</small>
-                      </button>
-                    </form>
-                  </li>
-                @endforeach
-              </ul>
-            </li>
-            @endauth
-
-            {{-- Language switcher (no refresh) --}}
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown" title="{{ __('admin.language') }}">
-                <i class="bi bi-translate"></i>
-                <span class="d-none d-md-inline ms-1" id="current-locale-label">{{ strtoupper(app()->getLocale()) }}</span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <button type="button" class="dropdown-item js-set-locale" data-locale="en">
-                    <span class="me-2">🇬🇧</span> English
-                  </button>
-                </li>
-                <li>
-                  <button type="button" class="dropdown-item js-set-locale" data-locale="km">
-                    <span class="me-2">🇰🇭</span> ខ្មែរ
-                  </button>
-                </li>
-              </ul>
-            </li>
-
-            {{-- User menu --}}
-            @auth
-            <li class="nav-item dropdown dropdown-large">
-              <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown">
-                <div class="user-setting d-flex align-items-center gap-1">
-                  <img src="{{ auth()->user()->avatar_path ?: asset('assets/backend/assets/images/avatars/avatar-1.png') }}" class="user-img" alt="">
-                  <div class="user-name d-none d-sm-block">{{ auth()->user()->name }}</div>
-                </div>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                  <a class="dropdown-item" href="#">
-                    <div class="d-flex align-items-center">
-                      <img src="{{ auth()->user()->avatar_path ?: asset('assets/backend/assets/images/avatars/avatar-1.png') }}" alt="" class="rounded-circle" width="60" height="60">
-                      <div class="ms-3">
-                        <h6 class="mb-0 dropdown-user-name">{{ auth()->user()->name }}</h6>
-                        <small class="mb-0 dropdown-user-designation text-secondary">{{ ucfirst(str_replace('_',' ', auth()->user()->user_type ?? '')) }}</small>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
-                    <div class="d-flex align-items-center">
-                      <div class="setting-icon"><i class="bi bi-speedometer"></i></div>
-                      <div class="setting-text ms-3"><span data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</span></div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{{ route('admin.system-settings.index') }}">
-                    <div class="d-flex align-items-center">
-                      <div class="setting-icon"><i class="bi bi-gear-fill"></i></div>
-                      <div class="setting-text ms-3"><span data-i18n="admin.settings">{{ __('admin.settings') }}</span></div>
-                    </div>
-                  </a>
-                </li>
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">
-                      <div class="d-flex align-items-center">
-                        <div class="setting-icon"><i class="bi bi-box-arrow-right"></i></div>
-                        <div class="setting-text ms-3"><span data-i18n="admin.logout">{{ __('admin.logout') }}</span></div>
-                      </div>
+                    <button type="button" class="dropdown-item js-set-locale" data-locale="en">
+                      <span class="me-2">🇬🇧</span> English
                     </button>
-                  </form>
+                  </li>
+                  <li>
+                    <button type="button" class="dropdown-item js-set-locale" data-locale="km">
+                      <span class="me-2">🇰🇭</span> ខ្មែរ
+                    </button>
+                  </li>
+                </ul>
+              </li>
+
+              {{-- User menu --}}
+              @auth
+                <li class="nav-item dropdown dropdown-large header-action-item user-menu-item">
+                  <button
+                    class="nav-link dropdown-toggle dropdown-toggle-nocaret header-action-trigger header-user-trigger js-header-dropdown"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ auth()->user()->name }}">
+                    <div class="user-setting d-flex align-items-center gap-1">
+                      <img
+                        src="{{ auth()->user()->avatar_path ?: asset('assets/backend/assets/images/avatars/avatar-1.png') }}"
+                        class="user-img" alt="">
+                      <div class="user-name d-none d-sm-block">{{ auth()->user()->name }}</div>
+                      <i class="bi bi-chevron-down header-action-caret"></i>
+                    </div>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex align-items-center">
+                          <img
+                            src="{{ auth()->user()->avatar_path ?: asset('assets/backend/assets/images/avatars/avatar-1.png') }}"
+                            alt="" class="rounded-circle" width="60" height="60">
+                          <div class="ms-3">
+                            <h6 class="mb-0 dropdown-user-name">{{ auth()->user()->name }}</h6>
+                            <small
+                              class="mb-0 dropdown-user-designation text-secondary">{{ ucfirst(str_replace('_', ' ', auth()->user()->user_type ?? '')) }}</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                        <div class="d-flex align-items-center">
+                          <div class="setting-icon"><i class="bi bi-speedometer"></i></div>
+                          <div class="setting-text ms-3"><span
+                              data-i18n="admin.dashboard">{{ __('admin.dashboard') }}</span></div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{{ route('admin.system-settings.index') }}">
+                        <div class="d-flex align-items-center">
+                          <div class="setting-icon"><i class="bi bi-gear-fill"></i></div>
+                          <div class="setting-text ms-3"><span
+                              data-i18n="admin.settings">{{ __('admin.settings') }}</span></div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                          <div class="d-flex align-items-center">
+                            <div class="setting-icon"><i class="bi bi-box-arrow-right"></i></div>
+                            <div class="setting-text ms-3"><span
+                                data-i18n="admin.logout">{{ __('admin.logout') }}</span></div>
+                          </div>
+                        </button>
+                      </form>
+                    </li>
+                  </ul>
                 </li>
-              </ul>
-            </li>
-            @endauth
-          </ul>
+              @endauth
+            </ul>
+          </div>
         </div>
       </nav>
     </header>

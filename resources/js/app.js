@@ -3,6 +3,26 @@ import './bootstrap';
 import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
+function initHeaderDropdowns() {
+    document.querySelectorAll('.js-header-dropdown').forEach((toggle) => {
+        toggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            document
+                .querySelectorAll('.js-header-dropdown.show')
+                .forEach((openToggle) => {
+                    if (openToggle !== toggle) {
+                        bootstrap.Dropdown.getOrCreateInstance(openToggle).hide();
+                    }
+                });
+
+            const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
+            dropdown.toggle();
+        });
+    });
+}
+
 // The bundled admin theme (public/assets/backend/...) ships its own jQuery 3
 // and a chain of plugins (metismenu, simplebar, perfect-scrollbar) that attach
 // to it. To keep those plugins working we DO NOT overwrite window.$ when the
@@ -41,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         jQuery.ajaxSetup({ headers: { 'X-CSRF-TOKEN': csrfToken } });
     }
 
+    initHeaderDropdowns();
     initTheme();
     initI18n();
     initSidebar();

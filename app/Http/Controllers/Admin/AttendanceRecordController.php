@@ -54,7 +54,18 @@ class AttendanceRecordController extends Controller
     public function entry(Request $request)
     {
         $sessionId = $request->integer('session_id');
-        $session = $sessionId ? AttendanceSession::with(['schoolClass', 'subject', 'teacher', 'records'])->find($sessionId) : null;
+        $session = $sessionId
+            ? AttendanceSession::with([
+                'schoolClass.gradeLevel',
+                'schoolClass.academicYear',
+                'schoolClass.term',
+                'schoolClass.shift',
+                'schoolClass.room',
+                'subject',
+                'teacher',
+                'records',
+            ])->find($sessionId)
+            : null;
 
         $classes = SchoolClass::query()
             ->when($this->branchContext->currentId(), fn ($q, $bid) => $q->where('branch_id', $bid))
@@ -70,8 +81,10 @@ class AttendanceRecordController extends Controller
         if ($session) {
             $students = Student::query()
                 ->whereHas('classes', fn ($q) => $q->where('class_id', $session->class_id))
+                ->orderBy('student_no')
+                ->orderBy('student_code')
                 ->orderBy('name_en')
-                ->get(['id', 'name_en', 'name_kh', 'student_code']);
+                ->get(['id', 'name_en', 'name_kh', 'student_code', 'student_no', 'gender']);
             foreach ($session->records as $rec) {
                 $initial[$rec->student_id] = [
                     'attendance_status_id' => $rec->attendance_status_id,
@@ -83,6 +96,7 @@ class AttendanceRecordController extends Controller
 
         return view('admin.attendance-records.entry', [
             'sessions' => AttendanceSession::query()
+                ->with('schoolClass:id,name')
                 ->when($this->branchContext->currentId(), fn ($q, $bid) => $q->where('branch_id', $bid))
                 ->latest('attendance_date')->limit(50)->get(),
             'session'  => $session,
