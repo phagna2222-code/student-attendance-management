@@ -1,4 +1,17 @@
-// SAMS admin styles - minimal Skodash-like theme
+// SAMS admin Vite layer.
+//
+// The bundled admin theme (public/assets/backend/assets/css/{bootstrap,
+// bootstrap-extended,style,icons,*-theme,header-colors}.css) already provides
+// the layout: .wrapper, .sidebar-wrapper, .top-header, .page-content, etc.
+// This file only adds:
+//   1. A SCSS-compiled Bootstrap so app code that uses Bootstrap utility
+//      classes (col-*, d-flex, etc.) still works alongside the theme.
+//   2. JS-plugin styles that the theme doesn't ship (DataTables, Tom Select,
+//      Flatpickr, SweetAlert2).
+//   3. Khmer font + a couple of small SAMS-only tweaks that DO NOT touch the
+//      theme's positioning of .top-header, .sidebar-wrapper, .page-content,
+//      or .wrapper -- those caused the navbar to expand to the full viewport
+//      and hide the main content area.
 $primary: #6366f1;
 $secondary: #475569;
 $success: #16a34a;
@@ -14,145 +27,23 @@ $info: #0ea5e9;
 @import "flatpickr/dist/flatpickr.min.css";
 @import "sweetalert2/src/sweetalert2.scss";
 
-/* Layout - Skodash-like */
-:root {
-    --sidebar-width: 250px;
-    --header-height: 60px;
-    --sidebar-bg: #ffffff;
-    --sidebar-border: #e9ecef;
-}
-
-html, body {
-    background: #f6f7fb;
-    font-family: 'Roboto', 'Battambang', system-ui, -apple-system, "Segoe UI", sans-serif;
-    color: #212529;
-}
-
+/* Khmer font when the page is rendered in km locale */
 html[lang="km"], html[lang="km"] body {
     font-family: 'Battambang', 'Roboto', system-ui, sans-serif;
 }
 
-.wrapper {
-    display: flex;
-    min-height: 100vh;
+/* SAMS card tweaks (do not conflict with theme layout) */
+.page-content > .row .card {
+    border: 0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .06);
+    border-radius: 12px;
 }
 
-.sidebar-wrapper {
-    position: fixed;
-    top: 0; left: 0;
-    width: var(--sidebar-width);
-    height: 100vh;
-    background: var(--sidebar-bg);
-    border-right: 1px solid var(--sidebar-border);
-    overflow-y: auto;
-    z-index: 1030;
-    .sidebar-header {
-        height: var(--header-height);
-        display: flex;
-        align-items: center;
-        padding: 0 1rem;
-        border-bottom: 1px solid var(--sidebar-border);
-        gap: .5rem;
-        .logo-icon { width: 28px; height: 28px; }
-        .logo-text { font-size: 1.1rem; font-weight: 600; margin: 0; }
-        .toggle-icon { cursor: pointer; }
-    }
-    .metismenu {
-        list-style: none;
-        padding: .5rem 0;
-        margin: 0;
-        > li {
-            > a {
-                display: flex;
-                align-items: center;
-                padding: .65rem 1rem;
-                color: #475569;
-                text-decoration: none;
-                gap: .5rem;
-                &:hover { background: rgba(99,102,241,.08); color: $primary; }
-                .parent-icon { width: 24px; text-align: center; }
-                .menu-title { flex: 1; font-size: .9rem; }
-                &.has-arrow::after {
-                    content: "\f282";
-                    font-family: "bootstrap-icons";
-                    font-size: .75rem;
-                    margin-left: auto;
-                }
-            }
-            &.menu-label {
-                padding: .65rem 1rem;
-                font-size: .7rem;
-                text-transform: uppercase;
-                letter-spacing: .08em;
-                color: #94a3b8;
-                font-weight: 600;
-            }
-            &.mm-active > a { color: $primary; background: rgba(99,102,241,.08); }
-            > ul {
-                list-style: none;
-                padding: 0 0 0 2rem;
-                margin: 0;
-                li a {
-                    display: flex;
-                    align-items: center;
-                    padding: .4rem .75rem;
-                    color: #64748b;
-                    text-decoration: none;
-                    gap: .35rem;
-                    font-size: .85rem;
-                    &:hover { color: $primary; }
-                }
-            }
-        }
-    }
-}
+/* Tom-select sizing inside Bootstrap forms */
+.ts-wrapper.form-control,
+.ts-wrapper.single .ts-control { min-height: 38px; }
 
-.top-header {
-    position: fixed;
-    top: 0;
-    left: var(--sidebar-width);
-    right: 0;
-    height: var(--header-height);
-    background: #fff;
-    border-bottom: 1px solid var(--sidebar-border);
-    z-index: 1020;
-    .navbar { height: 100%; padding: 0 1rem; }
-    .user-img { width: 32px; height: 32px; border-radius: 50%; }
-    .nav-link { color: #475569; }
-    .searchbar {
-        position: relative;
-        max-width: 400px;
-        flex: 1;
-        margin: 0 1rem;
-        .search-icon { left: 0; }
-        .form-control { padding-left: 2.5rem; background: #f1f5f9; border: 0; border-radius: 8px; }
-    }
-}
-
-.page-content {
-    flex: 1;
-    margin-left: var(--sidebar-width);
-    margin-top: var(--header-height);
-    padding: 1.25rem;
-    width: calc(100% - var(--sidebar-width));
-}
-
-.page-breadcrumb {
-    background: transparent;
-    padding-bottom: .25rem;
-    .breadcrumb-title { font-weight: 600; }
-}
-
-.back-to-top { display: none; }
-
-/* Cards */
-.card { border: 0; box-shadow: 0 1px 3px rgba(15,23,42,.06); border-radius: 12px; }
-.card-header { background: transparent; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
-
-/* Tom-select adjustments */
-.ts-wrapper.form-control, .ts-wrapper.single .ts-control { min-height: 38px; }
-
-/* DataTable BS5 fixed pagination */
+/* DataTable BS5 pagination polish */
 table.dataTable { width: 100% !important; }
 .dataTables_wrapper .dataTables_paginate { padding-top: .5rem; }
 .dataTables_wrapper .dataTables_paginate .pagination { margin-bottom: 0; }
@@ -164,27 +55,22 @@ table.dataTable { width: 100% !important; }
 .dataTables_wrapper .dataTables_paginate .paginate_button.page-item .page-link {
     color: $primary;
 }
-.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter {
-    margin-bottom: .75rem;
-}
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter { margin-bottom: .75rem; }
 .dataTables_wrapper .dataTables_info { padding-top: .5rem; }
 
-/* Login page */
+/* Standalone login screen (does not use the admin layout) */
 body.login-bg {
     background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
-    display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
 }
 .login-card {
     width: 420px;
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(15,23,42,.2);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, .2);
     padding: 2rem;
-}
-
-@media (max-width: 1199.98px) {
-    .sidebar-wrapper { transform: translateX(-100%); transition: transform .25s ease; }
-    .top-header { left: 0; }
-    .page-content { margin-left: 0; width: 100%; }
-    body.toggled .sidebar-wrapper { transform: translateX(0); }
 }
