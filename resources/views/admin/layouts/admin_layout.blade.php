@@ -58,11 +58,11 @@
     <!--start switcher-->
     <div class="switcher-body">
       <button class="btn btn-primary btn-switcher shadow-sm" type="button" data-bs-toggle="offcanvas"
-              data-bs-target="#themeSwitcher" aria-controls="themeSwitcher" title="{{ __('admin.theme_customizer') }}">
+        data-bs-target="#themeSwitcher" aria-controls="themeSwitcher" title="{{ __('admin.theme_customizer') }}">
         <i class="bi bi-paint-bucket me-0"></i>
       </button>
-      <div class="offcanvas offcanvas-end shadow border-start-0 p-2"
-           data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="themeSwitcher">
+      <div class="offcanvas offcanvas-end shadow border-start-0 p-2" data-bs-scroll="true" data-bs-backdrop="false"
+        tabindex="-1" id="themeSwitcher">
         <div class="offcanvas-header border-bottom">
           <h5 class="offcanvas-title" data-i18n="admin.theme_customizer">{{ __('admin.theme_customizer') }}</h5>
           <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
@@ -71,31 +71,39 @@
           <h6 class="mb-0" data-i18n="admin.theme_variation">{{ __('admin.theme_variation') }}</h6>
           <hr>
           <div class="form-check form-check-inline">
-            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="LightTheme" value="light">
-            <label class="form-check-label" for="LightTheme" data-i18n="admin.theme_light">{{ __('admin.theme_light') }}</label>
+            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="LightTheme"
+              value="light">
+            <label class="form-check-label" for="LightTheme"
+              data-i18n="admin.theme_light">{{ __('admin.theme_light') }}</label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="DarkTheme" value="dark">
-            <label class="form-check-label" for="DarkTheme" data-i18n="admin.theme_dark">{{ __('admin.theme_dark') }}</label>
+            <label class="form-check-label" for="DarkTheme"
+              data-i18n="admin.theme_dark">{{ __('admin.theme_dark') }}</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="SemiDarkTheme" value="semi-dark">
-            <label class="form-check-label" for="SemiDarkTheme" data-i18n="admin.theme_semi_dark">{{ __('admin.theme_semi_dark') }}</label>
+            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="SemiDarkTheme"
+              value="semi-dark">
+            <label class="form-check-label" for="SemiDarkTheme"
+              data-i18n="admin.theme_semi_dark">{{ __('admin.theme_semi_dark') }}</label>
           </div>
           <hr>
           <div class="form-check form-check-inline">
-            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="MinimalTheme" value="minimal" checked>
-            <label class="form-check-label" for="MinimalTheme" data-i18n="admin.theme_minimal">{{ __('admin.theme_minimal') }}</label>
+            <input class="form-check-input js-theme-mode" type="radio" name="themeMode" id="MinimalTheme"
+              value="minimal" checked>
+            <label class="form-check-label" for="MinimalTheme"
+              data-i18n="admin.theme_minimal">{{ __('admin.theme_minimal') }}</label>
           </div>
-          <hr/>
+          <hr />
           <h6 class="mb-0" data-i18n="admin.theme_header_colors">{{ __('admin.theme_header_colors') }}</h6>
-          <hr/>
+          <hr />
           <div class="header-colors-indigators">
             <div class="row row-cols-auto g-3">
               @for ($i = 1; $i <= 8; $i++)
                 <div class="col">
                   <div class="indigator headercolor{{ $i }} js-header-color"
-                       data-color="headercolor{{ $i }}" id="headercolor{{ $i }}" role="button"></div>
+                    data-color="headercolor{{ $i }}" id="headercolor{{ $i }}" role="button">
+                  </div>
                 </div>
               @endfor
             </div>

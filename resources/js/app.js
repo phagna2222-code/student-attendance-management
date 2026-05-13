@@ -1,7 +1,7 @@
 import './bootstrap';
 
-import * as bootstrap from 'bootstrap';
-window.bootstrap = bootstrap;
+import DataTable from 'datatables.net-bs5';
+import 'datatables.net-buttons-bs5';
 
 // The bundled admin theme (public/assets/backend/...) ships its own jQuery 3
 // and a chain of plugins (metismenu, simplebar, perfect-scrollbar) that attach
@@ -13,9 +13,10 @@ const $jq = window.jQuery && window.jQuery.fn ? window.jQuery : jQuery;
 if (!window.jQuery) {
     window.$ = window.jQuery = jQuery;
 }
-
-import('datatables.net-bs5').then(({ default: dtFactory }) => dtFactory && dtFactory(window, $jq));
-import('datatables.net-buttons-bs5').then(({ default: btnFactory }) => btnFactory && btnFactory(window, $jq));
+if ($jq !== jQuery && DataTable && jQuery.fn.dataTable) {
+    $jq.fn.dataTable = jQuery.fn.dataTable;
+    $jq.fn.DataTable = jQuery.fn.DataTable;
+}
 
 import Swal from 'sweetalert2';
 window.Swal = Swal;
@@ -31,7 +32,6 @@ import { initDataTables } from './admin/datatable.js';
 import { initDeleteHandlers } from './admin/delete.js';
 import { initFormWidgets } from './admin/form.js';
 import { initTheme } from './admin/theme.js';
-import { initSidebar } from './admin/sidebar.js';
 import { mountReactRoots } from './react/mount.jsx';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initTheme();
     initI18n();
-    initSidebar();
     initDataTables();
     initDeleteHandlers();
     initFormWidgets();

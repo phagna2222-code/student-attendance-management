@@ -7,18 +7,18 @@
 @endsection
 @section('content')
   @include('admin.partials._card_index', [
-    'title' => __('admin.records'),
-    'createUrl' => null,
-    'datatableUrl' => route('admin.attendance-records.datatable'),
-    'columns' => [
-      ['data'=>'id','title'=>'#'],
-      ['data'=>'class_name','title'=>__('admin.classes')],
-      ['data'=>'attendance_date','title'=>'Date'],
-      ['data'=>'student_name','title'=>__('admin.students')],
-      ['data'=>'student_code','title'=>'Code'],
-      ['data'=>'status_name','title'=>'Status'],
-      ['data'=>'is_late','title'=>'Late'],
-      ['data'=>'method','title'=>'Method'],
-    ],
+      'title' => __('admin.records'),
+      'createUrl' => null,
+      'datatableUrl' => route('admin.attendance-records.datatable'),
+      'columns' => [
+          ['data' => 'id', 'title' => '#'],
+          ['data' => 'class_name', 'title' => __('admin.classes')],
+          ['data' => 'attendance_date', 'title' => __('admin.date')],
+          ['data' => 'student_name', 'title' => __('admin.students')],
+          ['data' => 'student_code', 'title' => __('admin.code')],
+          ['data' => 'status_name', 'title' => __('admin.status')],
+          ['data' => 'is_late', 'title' => __('admin.late')],
+          ['data' => 'method', 'title' => __('admin.method')],
+      ],
   ])
 @endsection
