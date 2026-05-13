@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -81,5 +82,48 @@ class User extends Authenticatable
     public function isSuperAdmin(): bool
     {
         return $this->user_type === 'super_admin' || $this->hasRole('super-admin');
+    }
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+
+    public function createdSessions(): HasMany
+    {
+        return $this->hasMany(AttendanceSession::class, 'created_by');
+    }
+
+    public function markedRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class, 'marked_by');
+    }
+
+    public function generatedReports(): HasMany
+    {
+        return $this->hasMany(GeneratedReport::class, 'generated_by');
+    }
+
+    public function backupLogs(): HasMany
+    {
+        return $this->hasMany(BackupLog::class, 'requested_by');
+    }
+
+    public function notificationsCreated(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'created_by');
+    }
+
+    public function attendanceEditRequests(): HasMany
+    {
+        return $this->hasMany(AttendanceEditRequest::class, 'requested_by');
+    }
+
+    public function hasPermission(string $slug): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+        return $this->roles()->whereHas('permissions', fn ($q) => $q->where('slug', $slug))->exists();
     }
 }

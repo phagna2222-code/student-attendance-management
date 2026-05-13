@@ -39,4 +39,19 @@ class AttendanceRecord extends Model
     {
         return $this->belongsTo(AttendanceStatus::class, 'attendance_status_id');
     }
+
+    public function markedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'marked_by');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function editRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(AttendanceEditRequest::class);
+    }
 }

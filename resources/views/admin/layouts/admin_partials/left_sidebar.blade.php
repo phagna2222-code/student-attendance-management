@@ -183,7 +183,7 @@
     </li>
 
     <li
-      class="{{ request()->routeIs('admin.attendance-sessions.*', 'admin.attendance-records.index', 'admin.leave-requests.*') ? 'mm-active' : '' }}">
+      class="{{ request()->routeIs('admin.attendance-sessions.*', 'admin.attendance-records.index', 'admin.leave-requests.*', 'admin.attendance-imports.*', 'admin.attendance-edit-requests.*', 'admin.teaching-records.*') ? 'mm-active' : '' }}">
       <a href="javascript:;" class="has-arrow">
         <div class="parent-icon"><i class="bi bi-calendar2-check"></i></div>
         <div class="menu-title" data-i18n="admin.attendance">{{ __('admin.attendance') }}</div>
@@ -199,6 +199,24 @@
             <i class="bi bi-arrow-right-short"></i><span data-i18n="admin.records">{{ __('admin.records') }}</span>
           </a>
         </li>
+        <li class="{{ request()->routeIs('admin.attendance-imports.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.attendance-imports.index') }}">
+            <i class="bi bi-arrow-right-short"></i><span
+              data-i18n="admin.attendance_imports">{{ __('admin.attendance_imports') }}</span>
+          </a>
+        </li>
+        <li class="{{ request()->routeIs('admin.attendance-edit-requests.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.attendance-edit-requests.index') }}">
+            <i class="bi bi-arrow-right-short"></i><span
+              data-i18n="admin.attendance_edit_requests">{{ __('admin.attendance_edit_requests') }}</span>
+          </a>
+        </li>
+        <li class="{{ request()->routeIs('admin.teaching-records.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.teaching-records.index') }}">
+            <i class="bi bi-arrow-right-short"></i><span
+              data-i18n="admin.teaching_records">{{ __('admin.teaching_records') }}</span>
+          </a>
+        </li>
         <li class="{{ request()->routeIs('admin.leave-requests.*') ? 'mm-active' : '' }}">
           <a href="{{ route('admin.leave-requests.index') }}">
             <i class="bi bi-arrow-right-short"></i><span
@@ -211,7 +229,8 @@
     {{-- ─────────────── Communication ─────────────── --}}
     <li class="menu-label" data-i18n="admin.section_communication">{{ __('admin.section_communication') }}</li>
 
-    <li class="{{ request()->routeIs('admin.notification-templates.*', 'admin.notifications.*') ? 'mm-active' : '' }}">
+    <li
+      class="{{ request()->routeIs('admin.notification-templates.*', 'admin.notifications.*', 'admin.notification-logs.*') ? 'mm-active' : '' }}">
       <a href="javascript:;" class="has-arrow">
         <div class="parent-icon"><i class="bi bi-megaphone"></i></div>
         <div class="menu-title" data-i18n="admin.notifications">{{ __('admin.notifications') }}</div>
@@ -229,6 +248,12 @@
               data-i18n="admin.notifications_list">{{ __('admin.notifications_list') }}</span>
           </a>
         </li>
+        <li class="{{ request()->routeIs('admin.notification-logs.*') ? 'mm-active' : '' }}">
+          <a href="{{ route('admin.notification-logs.index') }}">
+            <i class="bi bi-arrow-right-short"></i><span
+              data-i18n="admin.notification_logs">{{ __('admin.notification_logs') }}</span>
+          </a>
+        </li>
       </ul>
     </li>
 
@@ -239,6 +264,13 @@
       <a href="{{ route('admin.reports.index') }}">
         <div class="parent-icon"><i class="bi bi-bar-chart-line"></i></div>
         <div class="menu-title" data-i18n="admin.reports">{{ __('admin.reports') }}</div>
+      </a>
+    </li>
+
+    <li class="{{ request()->routeIs('admin.analytics-snapshots.*') ? 'mm-active' : '' }}">
+      <a href="{{ route('admin.analytics-snapshots.index') }}">
+        <div class="parent-icon"><i class="bi bi-graph-up"></i></div>
+        <div class="menu-title" data-i18n="admin.analytics_snapshots">{{ __('admin.analytics_snapshots') }}</div>
       </a>
     </li>
 
@@ -284,6 +316,13 @@
       <a href="{{ route('admin.system-settings.index') }}">
         <div class="parent-icon"><i class="bi bi-sliders"></i></div>
         <div class="menu-title" data-i18n="admin.settings">{{ __('admin.settings') }}</div>
+      </a>
+    </li>
+
+    <li class="{{ request()->routeIs('admin.backup-logs.*') ? 'mm-active' : '' }}">
+      <a href="{{ route('admin.backup-logs.index') }}">
+        <div class="parent-icon"><i class="bi bi-cloud-arrow-up"></i></div>
+        <div class="menu-title" data-i18n="admin.backup_logs">{{ __('admin.backup_logs') }}</div>
       </a>
     </li>
 

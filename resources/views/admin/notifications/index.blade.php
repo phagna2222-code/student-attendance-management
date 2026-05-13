@@ -3,7 +3,7 @@
 @section('content')
   @include('admin.partials._card_index', [
       'title' => __('admin.notifications_list'),
-      'createUrl' => null,
+      'createUrl' => route('admin.notifications.compose'),
       'datatableUrl' => route('admin.notifications.datatable'),
       'columns' => [
           ['data' => 'id', 'title' => '#'],
