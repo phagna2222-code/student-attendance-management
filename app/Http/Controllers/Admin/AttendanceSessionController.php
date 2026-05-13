@@ -68,6 +68,56 @@ class AttendanceSessionController extends ResourceController
         return redirect()->route('admin.attendance-records.entry', ['session_id' => $session->id]);
     }
 
+    public function submit(int $id)
+    {
+        $session = AttendanceSession::findOrFail($id);
+        if ($session->submission_status === 'locked') {
+            flash()->error(__('admin.session_already_locked'));
+            return back();
+        }
+        $session->update([
+            'submission_status' => 'submitted',
+            'submitted_by' => auth()->id(),
+            'submitted_at' => now(),
+        ]);
+        flash()->success(__('admin.session_submitted'));
+        return back();
+    }
+
+    public function lock(int $id)
+    {
+        $session = AttendanceSession::findOrFail($id);
+        $session->update([
+            'submission_status' => 'locked',
+            'locked_by' => auth()->id(),
+            'locked_at' => now(),
+        ]);
+        flash()->success(__('admin.session_locked'));
+        return back();
+    }
+
+    public function cancel(int $id)
+    {
+        $session = AttendanceSession::findOrFail($id);
+        $session->update(['submission_status' => 'cancelled']);
+        flash()->success(__('admin.session_cancelled'));
+        return back();
+    }
+
+    public function reopen(int $id)
+    {
+        $session = AttendanceSession::findOrFail($id);
+        $session->update([
+            'submission_status' => 'draft',
+            'submitted_at' => null,
+            'submitted_by' => null,
+            'locked_at' => null,
+            'locked_by' => null,
+        ]);
+        flash()->success(__('admin.session_reopened'));
+        return back();
+    }
+
     protected function dataTableQuery(Request $request): Builder
     {
         $q = AttendanceSession::query()->with([

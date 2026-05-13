@@ -47,4 +47,50 @@ class LeaveRequestController extends ResourceController
             ->editColumn('start_date', fn ($r) => $r->start_date?->format('Y-m-d'))
             ->editColumn('end_date', fn ($r) => $r->end_date?->format('Y-m-d'));
     }
+
+    public function approve(int $id)
+    {
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->update([
+            'status' => 'approved',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+        ]);
+        flash()->success(__('admin.leave_approved'));
+        return back();
+    }
+
+    public function reject(Request $request, int $id)
+    {
+        $data = $request->validate(['reject_reason' => ['required', 'string', 'max:1000']]);
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->update([
+            'status' => 'rejected',
+            'approved_by' => auth()->id(),
+            'approved_at' => now(),
+            'reject_reason' => $data['reject_reason'],
+        ]);
+        flash()->success(__('admin.leave_rejected'));
+        return back();
+    }
+
+    public function needInfo(Request $request, int $id)
+    {
+        $data = $request->validate(['reject_reason' => ['nullable', 'string', 'max:1000']]);
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->update([
+            'status' => 'need_more_info',
+            'reject_reason' => $data['reject_reason'] ?? null,
+        ]);
+        flash()->success(__('admin.leave_need_info'));
+        return back();
+    }
+
+    public function cancel(int $id)
+    {
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->update(['status' => 'cancelled']);
+        flash()->success(__('admin.leave_cancelled'));
+        return back();
+    }
 }

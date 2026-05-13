@@ -36,4 +36,24 @@ class Notification extends Model
     {
         return $this->hasMany(NotificationLog::class);
     }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(StudentParent::class, 'parent_id');
+    }
+
+    public function schoolClass(): BelongsTo
+    {
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
+
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
