@@ -48,7 +48,7 @@ class ReportController extends Controller
 
         $report = GeneratedReport::create([
             'report_no'    => 'RPT-'.now()->format('Ymd-His').'-'.strtoupper(substr(bin2hex(random_bytes(2)), 0, 4)).'-'.strtoupper(substr($key, 0, 5)),
-            'report_type'  => $payload['report_type'] ?? 'general',
+            'report_type'  => $this->mapToReportTypeEnum($payload['report_type'] ?? $key),
             'branch_id'    => $request->input('branch_id'),
             'class_id'     => $request->input('class_id'),
             'student_id'   => $request->input('student_id'),
@@ -63,6 +63,34 @@ class ReportController extends Controller
         ]);
 
         return $this->exporter->export($report, $key, $payload, $format);
+    }
+
+    /**
+     * Map an internal report key/payload type to one of the enum values allowed by
+     * generated_reports.report_type. Migration enum is fixed, so we route any
+     * extra reports (pending_leave, class_roster, enrolment_movement,
+     * notification_delivery, audit_log, user_activity, permission_matrix, ...) to
+     * the closest valid bucket. The full key is preserved in `filters` for tracing.
+     */
+    protected function mapToReportTypeEnum(string $key): string
+    {
+        return match ($key) {
+            'daily_attendance_sheet', 'daily_attendance'                            => 'daily_attendance',
+            'monthly_attendance_summary', 'monthly_attendance'                      => 'monthly_attendance',
+            'student_attendance_history', 'student_attendance', 'student_history'   => 'student_history',
+            'teacher_submission_compliance', 'teacher_submission'                   => 'teacher_submission',
+            'absent_students'                                                        => 'absent_students',
+            'late_students'                                                          => 'late_students',
+            'consecutive_absent'                                                     => 'consecutive_absent',
+            'pending_leave', 'permission_students'                                  => 'permission_students',
+            'class_roster', 'class_summary',
+            'enrolment_movement', 'notification_delivery',
+            'audit_log', 'user_activity', 'permission_matrix'                       => 'class_summary',
+            'subject_attendance'                                                     => 'subject_attendance',
+            'yearly_attendance'                                                      => 'yearly_attendance',
+            'campus_attendance'                                                      => 'campus_attendance',
+            default                                                                  => 'class_summary',
+        };
     }
 
     protected function dispatch(string $key, Request $request): array
@@ -345,7 +373,7 @@ class ReportController extends Controller
     {
         if (! $classId) return ['title' => __('admin.report_r27'), 'rows' => [], 'summary' => []];
 
-        $class = SchoolClass::with(['students.parents:id,name_en,name_kh,phone,email,relationship'])->find($classId);
+        $class = SchoolClass::with(['students.parents:id,name_en,name_kh,phone,email'])->find($classId);
         if (! $class) return ['title' => __('admin.report_r27'), 'rows' => [], 'summary' => []];
 
         $rows = $class->students->map(fn ($s) => [
@@ -353,7 +381,7 @@ class ReportController extends Controller
             'student' => $s->localizedName(),
             'gender'  => $s->gender,
             'phone'   => $s->phone,
-            'parents' => $s->parents->map(fn ($p) => $p->localizedName().' ('.$p->relationship.', '.$p->phone.')')->implode('; '),
+            'parents' => $s->parents->map(fn ($p) => $p->localizedName().' ('.($p->pivot->relationship ?? 'guardian').', '.$p->phone.')')->implode('; '),
         ])->values()->all();
 
         return [
@@ -370,9 +398,9 @@ class ReportController extends Controller
     {
         $base = Student::query()->when($branchId, fn ($q) => $q->where('branch_id', $branchId));
 
-        $admitted = (clone $base)->whereBetween('enrollment_date', [$from, $to])->count();
-        $withdrew = (clone $base)->whereBetween('withdrawal_date', [$from, $to])->count();
-        $active   = (clone $base)->where('status', 'active')->count();
+        $admitted = (clone $base)->whereBetween('admission_date', [$from, $to])->count();
+        $withdrew = (clone $base)->whereBetween('exit_date', [$from, $to])->count();
+        $active   = (clone $base)->whereIn('status', ['active', 'studying'])->count();
         $byStatus = (clone $base)->selectRaw('status, count(*) as c')->groupBy('status')->pluck('c', 'status')->all();
 
         return [
@@ -455,10 +483,10 @@ class ReportController extends Controller
     protected function permissionMatrix(): array
     {
         $roles = Role::with('permissions:id,slug')->get();
-        $permissions = Permission::orderBy('module')->orderBy('slug')->get();
+        $permissions = Permission::orderBy('group')->orderBy('slug')->get();
 
         $rows = $permissions->map(function ($p) use ($roles) {
-            $row = ['module' => $p->module, 'permission' => $p->slug, 'name' => $p->name];
+            $row = ['group' => $p->group, 'permission' => $p->slug, 'name' => $p->name];
             foreach ($roles as $r) {
                 $row[$r->slug] = $r->permissions->contains('id', $p->id) ? '✓' : '';
             }
@@ -469,7 +497,7 @@ class ReportController extends Controller
             'title' => __('admin.report_r39'),
             'report_type' => 'permission_matrix',
             'rows' => $rows,
-            'columns' => array_merge(['module', 'permission', 'name'], $roles->pluck('slug')->all()),
+            'columns' => array_merge(['group', 'permission', 'name'], $roles->pluck('slug')->all()),
             'summary' => ['roles' => $roles->count(), 'permissions' => $permissions->count()],
         ];
     }
