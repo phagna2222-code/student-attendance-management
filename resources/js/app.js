@@ -3,25 +3,13 @@ import './bootstrap';
 import DataTable from 'datatables.net-bs5';
 import 'datatables.net-buttons-bs5';
 
-function initHeaderDropdowns() {
-    document.querySelectorAll('.js-header-dropdown').forEach((toggle) => {
-        toggle.addEventListener('click', (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            document
-                .querySelectorAll('.js-header-dropdown.show')
-                .forEach((openToggle) => {
-                    if (openToggle !== toggle) {
-                        bootstrap.Dropdown.getOrCreateInstance(openToggle).hide();
-                    }
-                });
-
-            const dropdown = bootstrap.Dropdown.getOrCreateInstance(toggle);
-            dropdown.toggle();
-        });
-    });
-}
+// Header dropdowns (branch picker, language switcher, user menu) rely on
+// Bootstrap 5's built-in `data-bs-toggle="dropdown"` data-API which is loaded
+// from public/assets/backend/assets/js/bootstrap.bundle.min.js. Bootstrap
+// already coordinates open/close across multiple dropdowns and handles the
+// outside-click + escape-key dismissal, so no manual JS is needed here. An
+// earlier custom click handler ended up double-toggling and left the menus
+// stuck closed — see https://github.com/phagna2222-code/student-attendance-management/issues
 
 // The bundled admin theme (public/assets/backend/...) ships its own jQuery 3
 // and a chain of plugins (metismenu, simplebar, perfect-scrollbar) that attach
@@ -61,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
         jQuery.ajaxSetup({ headers: { 'X-CSRF-TOKEN': csrfToken } });
     }
 
-    initHeaderDropdowns();
     initTheme();
     initI18n();
     initDataTables();
